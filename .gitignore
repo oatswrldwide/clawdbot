@@ -69,3 +69,7 @@ USER.md
 
 # local tooling
 .serena/
+
+# Generated reports (school leads)
+scripts/school-leads/school-leads-report.html
+scripts/school-leads/school-leads-report.pdf
