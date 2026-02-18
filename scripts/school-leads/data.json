@@ -1,0 +1,45 @@
+[
+  {
+    "schoolName": "Sample Elementary School",
+    "province": "Ontario",
+    "email": "john.doe@sampleschool.ca",
+    "contactType": "person",
+    "contactName": "John Doe",
+    "dateContacted": "2026-01-15",
+    "notes": "Principal - interested in program"
+  },
+  {
+    "schoolName": "Test High School",
+    "province": "Ontario",
+    "email": "admin@testhigh.ca",
+    "contactType": "admin",
+    "dateContacted": "2026-01-20",
+    "notes": "General inquiry sent"
+  },
+  {
+    "schoolName": "Example Academy",
+    "province": "British Columbia",
+    "email": "jane.smith@exampleacademy.ca",
+    "contactType": "person",
+    "contactName": "Jane Smith",
+    "dateContacted": "2026-02-01",
+    "notes": "Vice Principal - follow up needed"
+  },
+  {
+    "schoolName": "Demo Middle School",
+    "province": "British Columbia",
+    "email": "info@demomiddle.ca",
+    "contactType": "admin",
+    "dateContacted": "2026-02-05",
+    "notes": "Info email"
+  },
+  {
+    "schoolName": "Quebec Learning Center",
+    "province": "Quebec",
+    "email": "director@qlc.ca",
+    "contactType": "person",
+    "contactName": "Marie Tremblay",
+    "dateContacted": "2026-01-25",
+    "notes": "Director - very interested"
+  }
+]
