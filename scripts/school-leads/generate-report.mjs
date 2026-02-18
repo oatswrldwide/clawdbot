@@ -20,8 +20,25 @@ async function main() {
 
     // Read input data
     console.log(`📖 Reading leads from: ${inputFile}`);
+    if (!fs.existsSync(inputFile)) {
+      throw new Error(
+        `Input file not found: ${inputFile}\nPlease check the file path.`,
+      );
+    }
     const leadsData = fs.readFileSync(inputFile, 'utf-8');
-    const leads = JSON.parse(leadsData);
+    let leads;
+    try {
+      leads = JSON.parse(leadsData);
+    } catch (e) {
+      throw new Error(
+        `Invalid JSON in file: ${inputFile}\nPlease check that the file contains valid JSON.\nError: ${e.message}`,
+      );
+    }
+    if (!Array.isArray(leads)) {
+      throw new Error(
+        `Expected an array of leads, but got: ${typeof leads}\nThe JSON file should contain an array of school lead objects.`,
+      );
+    }
     console.log(`✅ Loaded ${leads.length} school leads\n`);
 
     // Sort leads
@@ -88,8 +105,9 @@ async function main() {
     console.log('\n✨ Done! Your reports are ready.');
   } catch (error) {
     console.error('❌ Error:', error.message);
-    if (error.stack) {
-      console.error('\nStack trace:');
+    console.error('');
+    if (process.env.DEBUG) {
+      console.error('Stack trace:');
       console.error(error.stack);
     }
     process.exit(1);
