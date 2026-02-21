@@ -27,17 +27,6 @@ Preferred setup: run the onboarding wizard (`clawdbot onboard`). It walks throug
 Works with npm, pnpm, or bun.
 New install? Start here: [Getting started](https://docs.clawd.bot/start/getting-started)
 
-**Subscriptions (OAuth):**
-- **[Anthropic](https://www.anthropic.com/)** (Claude Pro/Max)
-- **[OpenAI](https://openai.com/)** (ChatGPT/Codex)
-
-Model note: while any model is supported, I strongly recommend **Anthropic Pro/Max (100/200) + Opus 4.5** for long‑context strength and better prompt‑injection resistance. See [Onboarding](https://docs.clawd.bot/start/onboarding).
-
-## Models (selection + auth)
-
-- Models config + CLI: [Models](https://docs.clawd.bot/concepts/models)
-- Auth profile rotation (OAuth vs API keys) + fallbacks: [Model failover](https://docs.clawd.bot/concepts/model-failover)
-
 ## Install (recommended)
 
 Runtime: **Node ≥22**.
@@ -70,6 +59,17 @@ clawdbot agent --message "Ship checklist" --thinking high
 ```
 
 Upgrading? [Updating guide](https://docs.clawd.bot/install/updating) (and run `clawdbot doctor`).
+
+**Subscriptions (OAuth):**
+- **[Anthropic](https://www.anthropic.com/)** (Claude Pro/Max)
+- **[OpenAI](https://openai.com/)** (ChatGPT/Codex)
+
+Model note: while any model is supported, I strongly recommend **Anthropic Pro/Max (100/200) + Opus 4.5** for long‑context strength and better prompt‑injection resistance. See [Onboarding](https://docs.clawd.bot/start/onboarding).
+
+## Models (selection + auth)
+
+- Models config + CLI: [Models](https://docs.clawd.bot/concepts/models)
+- Auth profile rotation (OAuth vs API keys) + fallbacks: [Model failover](https://docs.clawd.bot/concepts/model-failover)
 
 ## Development channels
 
