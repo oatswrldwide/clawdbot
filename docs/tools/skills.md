@@ -262,6 +262,6 @@ See [Skills config](/tools/skills-config) for the full configuration schema.
 
 ## Looking for more skills?
 
-Browse https://clawdhub.com.
+Browse https://clawdhub.com, or see [Bundled Skills](/tools/bundled-skills) for a full catalog of the skills that ship with Clawdbot.
 
 ---
