@@ -307,3 +307,129 @@ describe("web_search perplexity baseUrl defaults", () => {
     expect(mockFetch.mock.calls[0]?.[0]).toBe("https://openrouter.ai/api/v1/chat/completions");
   });
 });
+
+describe("web_search brave core behavior", () => {
+  const priorFetch = global.fetch;
+
+  afterEach(() => {
+    vi.unstubAllEnvs();
+    // @ts-expect-error global fetch cleanup
+    global.fetch = priorFetch;
+  });
+
+  it("returns missing_brave_api_key error when no API key is configured", async () => {
+    vi.stubEnv("BRAVE_API_KEY", "");
+    const mockFetch = vi.fn();
+    // @ts-expect-error mock fetch
+    global.fetch = mockFetch;
+
+    const tool = createWebSearchTool({ config: {}, sandboxed: true });
+    const result = await tool?.execute?.(1, { query: "test" });
+
+    expect(mockFetch).not.toHaveBeenCalled();
+    expect(result?.details).toMatchObject({ error: "missing_brave_api_key" });
+  });
+
+  it("uses API key from config instead of env", async () => {
+    vi.stubEnv("BRAVE_API_KEY", "env-key");
+    const mockFetch = vi.fn(() =>
+      Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve({ web: { results: [] } }),
+      } as Response),
+    );
+    // @ts-expect-error mock fetch
+    global.fetch = mockFetch;
+
+    const tool = createWebSearchTool({
+      config: { tools: { web: { search: { apiKey: "config-key" } } } },
+      sandboxed: true,
+    });
+    await tool?.execute?.(1, { query: "test" });
+
+    expect(mockFetch).toHaveBeenCalled();
+    const options = mockFetch.mock.calls[0]?.[1] as RequestInit;
+    expect((options.headers as Record<string, string>)?.["X-Subscription-Token"]).toBe(
+      "config-key",
+    );
+  });
+
+  it("maps Brave result fields to the expected shape", async () => {
+    vi.stubEnv("BRAVE_API_KEY", "test-key");
+    const mockFetch = vi.fn(() =>
+      Promise.resolve({
+        ok: true,
+        json: () =>
+          Promise.resolve({
+            web: {
+              results: [
+                {
+                  title: "Hello World",
+                  url: "https://example.com/hello",
+                  description: "A greeting page",
+                  age: "2024-01-15",
+                },
+              ],
+            },
+          }),
+      } as Response),
+    );
+    // @ts-expect-error mock fetch
+    global.fetch = mockFetch;
+
+    const tool = createWebSearchTool({ config: undefined, sandboxed: true });
+    const result = await tool?.execute?.(1, { query: "hello world" });
+
+    expect(result?.details).toMatchObject({
+      query: "hello world",
+      provider: "brave",
+      count: 1,
+      results: [
+        {
+          title: "Hello World",
+          url: "https://example.com/hello",
+          description: "A greeting page",
+          published: "2024-01-15",
+          siteName: "example.com",
+        },
+      ],
+    });
+  });
+
+  it("passes count parameter to the Brave API", async () => {
+    vi.stubEnv("BRAVE_API_KEY", "test-key");
+    const mockFetch = vi.fn(() =>
+      Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve({ web: { results: [] } }),
+      } as Response),
+    );
+    // @ts-expect-error mock fetch
+    global.fetch = mockFetch;
+
+    const tool = createWebSearchTool({ config: undefined, sandboxed: true });
+    await tool?.execute?.(1, { query: "test", count: 7 });
+
+    const url = new URL(mockFetch.mock.calls[0][0] as string);
+    expect(url.searchParams.get("count")).toBe("7");
+  });
+
+  it("surfaces Brave API errors", async () => {
+    vi.stubEnv("BRAVE_API_KEY", "test-key");
+    const mockFetch = vi.fn(() =>
+      Promise.resolve({
+        ok: false,
+        status: 401,
+        statusText: "Unauthorized",
+        text: () => Promise.resolve("invalid key"),
+      } as Response),
+    );
+    // @ts-expect-error mock fetch
+    global.fetch = mockFetch;
+
+    const tool = createWebSearchTool({ config: undefined, sandboxed: true });
+    await expect(tool?.execute?.(1, { query: "brave-error-unique-query" })).rejects.toThrow(
+      "Brave Search API error (401)",
+    );
+  });
+});

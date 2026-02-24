@@ -1054,6 +1054,7 @@
           "multi-agent-sandbox-tools",
           "tools/reactions",
           "tools/skills",
+          "tools/bundled-skills",
           "tools/skills-config",
           "tools/clawdhub"
         ]

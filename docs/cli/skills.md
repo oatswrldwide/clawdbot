@@ -11,6 +11,7 @@ Inspect skills (bundled + workspace + managed overrides) and see what’s eligib
 
 Related:
 - Skills system: [Skills](/tools/skills)
+- Bundled skills catalog: [Bundled Skills](/tools/bundled-skills)
 - Skills config: [Skills config](/tools/skills-config)
 - ClawdHub installs: [ClawdHub](/tools/clawdhub)
 
